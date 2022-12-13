@@ -48,3 +48,25 @@
   width: 100%;
   height: 200px;
 }
+
+.shoppinglist{
+  display:grid;
+  grid-template-columns: 100px 1fr;
+  padding-right: 5%;
+}
+.error{
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  border-radius: 4px;
+  color: #a94442;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.success{
+  background-color: #dff0d8;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  color: #3c763d;
+  margin-bottom: 10px;
+  padding: 10px;
+}
