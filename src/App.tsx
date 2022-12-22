@@ -33,22 +33,41 @@ interface Joke {
 }
 
 
+
 const Navigation = () => {
   return (
     <Navbar bg="dark" variant="dark">
-      <Container style={{ alignContent: 'center' }}>
-        <Nav className="me-auto" style={{ alignContent: 'center' }}>
-          <NavLink to="/" style={{ textDecoration: 'none', color: 'grey', paddingRight: 30 }}>Home</NavLink>
-          <NavLink to="contact" style={{ textDecoration: 'none', color: 'grey' }}>Contact me</NavLink>
+      <Container style={{ alignContent: 'center'}}>
+        <Nav className="me-1">
+          <NavLink to="/" style={{ textDecoration: 'none', color: 'white', paddingRight: 30,fontWeight:'bold'}}>Home</NavLink>
+          <NavLink to="contact" style={{ textDecoration: 'none', color: 'white',fontWeight:'bold' }}>Contact me</NavLink>
         </Nav>
+        
       </Container>
     </Navbar>
   )
 }
-
+const localcolor = localStorage.getItem("white")
 const Components = () => {
   const [quote, setQuote] = useState<Quote>();
   const [joke, setJoke] = useState("");
+  const [color,setcolor] = useState('white')
+  const [textcolor,settextcolor] = useState('black')
+  const [buttoncolor,setbuttoncolor] = useState('dark')
+
+  const Nightswitch=()=>{
+
+    if (color == 'white') {
+      setcolor('black')
+      settextcolor('white')
+      setbuttoncolor('light')
+    }
+    else{
+      setcolor('white')
+      settextcolor('black')
+      setbuttoncolor('dark')
+    }
+  }
 
   const loadJoke = async () => {
     let response = await fetch("https://icanhazdadjoke.com/", {
@@ -68,33 +87,27 @@ const Components = () => {
     fetchFunction();
   }, []);
 
-  /*useEffect(() => {
-    const fetchFunction = async () => {
-      let result = await fetch("https://newsapi.org/v2/everything?q=apple&from=2022-12-14&to=2022-12-14&sortBy=popularity&apiKey=d4ffad5006aa4becb7253765145b053e");
-      //let json: Quote = await result.json();
-
-      console.log(result)
-    }
-    fetchFunction();
-  }, []);*/
-
   return (
-    <Container >
-      <div >
+    <div style={{backgroundColor: color}}>
+    <Container>
+      <div>
         <Outlet />
       </div>
-      <h1 style={{ textAlign: 'center', paddingBottom: 50 }}>My Portfolio</h1>
-      <h2 style={{ textAlign: 'center' }}>About Me</h2>
-      <div style={{ textAlign: 'center', paddingBottom: 80, fontWeight: 'bold', fontSize: 20 }}>
+      <div style={{ textAlign: 'center' }}>
+      <h1 style={{ paddingBottom: 50, color:textcolor }}>My Portfolio</h1>
+      <Button variant={buttoncolor} onClick={Nightswitch}> Night mode</Button>
+      <h2 style={{ color:textcolor}}>About Me</h2>
+      <div style={{ paddingBottom: 80, fontWeight: 'bold', fontSize: 20, color:textcolor }}>
         Greetings, my name is Hovsep Smbatian and welcome to my portfolio!!
         i'm a second year student for graduate programming from a school called "AP",
         My portfolio is here to show the different components i have created during my lessons in webframeworks if you wish to interact with any of em feel free to do so by clicking the button on each box.
          I have also prepared some API demonstrations at the bottom of the page to show off my skills using API's</div>
-      <h2 style={{ textAlign: 'center', paddingBottom: 50 }}>My components</h2>
+      <h2 style={{ paddingBottom: 50, color:textcolor }}>My components</h2>
+      </div>
       <Row className='justify-content-center'>
 
         <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/ColorSelect.jpg')} />
+          <Card.Img variant="top" src={require('./images/ColorSelect.jpg')} style={{marginTop:10}} />
           <Card.Body>
             <Card.Title>Color Select</Card.Title>
             <Card.Text>
@@ -105,7 +118,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/filter.jpg')} />
+          <Card.Img variant="top" src={require('./images/filter.jpg')} style={{marginTop:10}}/>
           <Card.Body>
             <Card.Title>Filter</Card.Title>
             <Card.Text>
@@ -116,7 +129,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/Shoppinglist.jpg')} />
+          <Card.Img variant="top" src={require('./images/Shoppinglist.jpg')} style={{marginTop:10}}/>
           <Card.Body>
             <Card.Title>Shopping list</Card.Title>
             <Card.Text>
@@ -127,7 +140,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/interval.jpg')} />
+          <Card.Img variant="top" src={require('./images/interval.jpg')} style={{marginTop:10}}/>
           <Card.Body>
             <Card.Title>Intervals</Card.Title>
             <Card.Text>
@@ -138,7 +151,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img variant="top" src={require('./images/LocalStorage.jpg')} />
+          <Card.Img variant="top" src={require('./images/LocalStorage.jpg')} style={{marginTop:10}}/>
           <Card.Body>
             <Card.Title>LocalStorage</Card.Title>
             <Card.Text>
@@ -149,7 +162,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img style={{maxHeight:200,maxWidth:200}} variant="top" src={require('./images/Pokemon.jpg')} />
+          <Card.Img style={{maxHeight:200,maxWidth:200,marginTop:10}} variant="top" src={require('./images/Pokemon.jpg')}/>
           <Card.Body>
             <Card.Title>Pokemon</Card.Title>
             <Card.Text>
@@ -160,7 +173,7 @@ const Components = () => {
         </Card>
 
         <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img variant="top" src={require('./images/ToDo.jpg')} />
+          <Card.Img variant="top" src={require('./images/ToDo.jpg')} style={{marginTop:10}}/>
           <Card.Body>
             <Card.Title>ToDo</Card.Title>
             <Card.Text>
@@ -170,7 +183,7 @@ const Components = () => {
           </Card.Body>
         </Card>
         <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img style={{maxHeight:200,maxWidth:200}} variant="top" src={require('./images/TicTacToe.jpg')} />
+          <Card.Img style={{maxHeight:200,maxWidth:200, marginTop:10}} variant="top" src={require('./images/TicTacToe.jpg')}/>
           <Card.Body>
             <Card.Title>TicTacToe</Card.Title>
             <Card.Text>
@@ -180,7 +193,7 @@ const Components = () => {
           </Card.Body>
         </Card>
       </Row>
-      <h2 style={{paddingTop:25,paddingBottom:25}}>API demonstrations</h2>
+      <h2 style={{paddingTop:25,paddingBottom:25, color:textcolor}}>API demonstrations</h2>
       <Accordion alwaysOpen>
         <Accordion.Item eventKey="0">
           <Accordion.Header >Random Quote</Accordion.Header>
@@ -204,6 +217,7 @@ const Components = () => {
         </Accordion.Item>
       </Accordion>
     </Container>
+    </div>
   );
 }
 
@@ -233,6 +247,23 @@ const Contact = () => {
   const [to_name, setTo_name] = useState("");
   const [from_name, setFrom_name] = useState("");
   const [message, setMessage] = useState("");
+  const [color,setcolor] = useState('white')
+  const [textcolor,settextcolor] = useState('black')
+  const [buttoncolor,setbuttoncolor] = useState('dark')
+
+  const Nightswitch=()=>{
+
+    if (color == 'white') {
+      setcolor('black')
+      settextcolor('white')
+      setbuttoncolor('light')
+    }
+    else{
+      setcolor('white')
+      settextcolor('black')
+      setbuttoncolor('dark')
+    }
+  }
 
   const sendEmail:React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -251,8 +282,11 @@ const Contact = () => {
 
   };
   return (
-    <div>
+    <div style={{backgroundColor: color, height:'100vh'}}>
       <Navigation />
+      <div style={{textAlign:'center', paddingBottom:20, paddingTop:20}}>
+      <Button variant={buttoncolor} onClick={Nightswitch}>Nightmode</Button>
+      </div>
       <Container >
         <form onSubmit={sendEmail}>
           <label>Name</label>
