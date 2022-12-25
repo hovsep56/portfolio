@@ -31,13 +31,10 @@ interface Joke {
   joke: string,
   status: number
 }
-interface news {
-  source: { id: any, name: string }
-  author: string,
-  title: string,
-  description: string,
-  url: any,
-  urlToImage: any
+interface CatFact {
+  fact: string
+  length: number,
+
 }
 interface weather {
   current: {
@@ -61,7 +58,7 @@ const Navigation = () => {
           <NavLink to="/" className={styles.navlink} style={{ paddingRight: 30 }}>Home</NavLink>
           <NavLink to="contact" className={styles.navlink} style={{ fontWeight: 'bold' }}>Contact me</NavLink>
         </Nav>
-        
+
       </Container>
     </Navbar>
   )
@@ -70,8 +67,9 @@ const Navigation = () => {
 const Components = ({ theme }: { theme: string }) => {
   const [quote, setQuote] = useState<Quote>();
   const [joke, setJoke] = useState("");
-  const [article, setArticle] = useState<news[]>([]);
+  const [catFact, setCatfact] = useState<CatFact>();
   const [weather, setWeather] = useState<weather>();
+  const [count, setcount] = useState<number>(0)
 
 
   const loadJoke = async () => {
@@ -93,9 +91,10 @@ const Components = ({ theme }: { theme: string }) => {
 
   useEffect(() => {
     (async () => {
-      let response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey=d4ffad5006aa4becb7253765145b053e`);
+      let response = await fetch(`https://catfact.ninja/fact`);
       let data = await response.json();
-      setArticle(data.articles)
+      console.log(data)
+      setCatfact(data)
     })();
 
   }, []);
@@ -232,23 +231,23 @@ const Components = ({ theme }: { theme: string }) => {
             <Accordion.Header >Jokes</Accordion.Header>
             <Accordion.Body>
               <div>
-                <div>{joke}</div>
+                <ul>
+                  {joke&&<li>
+                    {joke}
+                  </li>}
+                </ul>
                 <button onClick={loadJoke}>New joke</button>
               </div>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="2">
-            <Accordion.Header >Current news</Accordion.Header>
+            <Accordion.Header >Random cat fact</Accordion.Header>
             <Accordion.Body>
               <div>
-                <ul style={{ listStyleType: 'decimal' }}>
-                  <div>{article.map(art => {
-                    return (
-                      <li>
-                        <div> {art.title}</div>
-                      </li>
-                    )
-                  })}</div>
+                <ul>
+                  <li>
+                    {catFact?.fact}
+                  </li>
                 </ul>
               </div>
             </Accordion.Body>
@@ -287,7 +286,6 @@ const Contact = ({ theme }: { theme: string }) => {
   const [to_name, setTo_name] = useState("");
   const [from_name, setFrom_name] = useState("");
   const [message, setMessage] = useState("");
-
 
   const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
