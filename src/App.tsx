@@ -52,6 +52,7 @@ const nightMode = (theme: string) => {
   return { backgroundColor: theme === "black" ? "black" : "white" }
 }
 
+
 const Navigation = () => {
   return (
     <Navbar bg="dark" variant="dark">
@@ -60,6 +61,7 @@ const Navigation = () => {
           <NavLink to="/" className={styles.navlink} style={{ paddingRight: 30 }}>Home</NavLink>
           <NavLink to="contact" className={styles.navlink} style={{ fontWeight: 'bold' }}>Contact me</NavLink>
         </Nav>
+        
       </Container>
     </Navbar>
   )
@@ -285,6 +287,23 @@ const Contact = ({ theme }: { theme: string }) => {
   const [to_name, setTo_name] = useState("");
   const [from_name, setFrom_name] = useState("");
   const [message, setMessage] = useState("");
+  const [color,setcolor] = useState('white')
+  const [textcolor,settextcolor] = useState('black')
+  const [buttoncolor,setbuttoncolor] = useState('dark')
+
+  const Nightswitch=()=>{
+
+    if (color == 'white') {
+      setcolor('black')
+      settextcolor('white')
+      setbuttoncolor('light')
+    }
+    else{
+      setcolor('white')
+      settextcolor('black')
+      setbuttoncolor('dark')
+    }
+  }
 
   const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
