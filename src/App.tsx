@@ -287,23 +287,7 @@ const Contact = ({ theme }: { theme: string }) => {
   const [to_name, setTo_name] = useState("");
   const [from_name, setFrom_name] = useState("");
   const [message, setMessage] = useState("");
-  const [color,setcolor] = useState('white')
-  const [textcolor,settextcolor] = useState('black')
-  const [buttoncolor,setbuttoncolor] = useState('dark')
 
-  const Nightswitch=()=>{
-
-    if (color == 'white') {
-      setcolor('black')
-      settextcolor('white')
-      setbuttoncolor('light')
-    }
-    else{
-      setcolor('white')
-      settextcolor('black')
-      setbuttoncolor('dark')
-    }
-  }
 
   const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
