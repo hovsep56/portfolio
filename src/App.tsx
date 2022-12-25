@@ -73,42 +73,6 @@ const Components = ({ theme }: { theme: string }) => {
   const [article, setArticle] = useState<news[]>([]);
   const [weather, setWeather] = useState<weather>();
 
-
-  const loadJoke = async () => {
-    let response = await fetch("https://icanhazdadjoke.com/", {
-      headers: { "Accept": "application/json" }
-    });
-    let joke: Joke = await response.json();
-    setJoke(joke.joke);
-  }
-
-  useEffect(() => {
-    const fetchFunction = async () => {
-      let result = await fetch("https://api.quotable.io/random");
-      let json: Quote = await result.json();
-      setQuote(json);
-    }
-    fetchFunction();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      let response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey=d4ffad5006aa4becb7253765145b053e`);
-      let data = await response.json();
-      setArticle(data.articles)
-    })();
-
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      let response = await fetch(`https://api.weatherapi.com/v1/current.json?key=8d21542a2f2f4c14b14135505221812&q=Belgium`);
-      let data = await response.json();
-      console.log(data)
-      setWeather(data)
-    })();
-
-  }, []);
   return (
     <div style={{ backgroundColor: theme }}>
       <Container >
@@ -216,57 +180,6 @@ const Components = ({ theme }: { theme: string }) => {
           </Card>
         </Row>
         <h2 style={{ paddingTop: 25, paddingBottom: 25, color: theme === "white" ? "black" : "white" }}>API demonstrations</h2>
-        <Accordion alwaysOpen>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header >Random Quote</Accordion.Header>
-            <Accordion.Body>
-              {quote && (
-                <ul>
-                  <li>Author: {quote.author}</li>
-                  <li>Quote: {quote.content}</li>
-                </ul>
-              )}
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="1">
-            <Accordion.Header >Jokes</Accordion.Header>
-            <Accordion.Body>
-              <div>
-                <div>{joke}</div>
-                <button onClick={loadJoke}>New joke</button>
-              </div>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="2">
-            <Accordion.Header >Current news</Accordion.Header>
-            <Accordion.Body>
-              <div>
-                <ul style={{ listStyleType: 'decimal' }}>
-                  <div>{article.map(art => {
-                    return (
-                      <li>
-                        <div> {art.title}</div>
-                      </li>
-                    )
-                  })}</div>
-                </ul>
-              </div>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="3">
-            <Accordion.Header >Current weather in Belgium</Accordion.Header>
-            <Accordion.Body>
-              <div>
-                <ul>
-                  <li>Last updated: {weather?.current.last_updated}</li>
-                  <li>Celcius: {weather?.current.temp_c.toString()}C</li>
-                  <li>Fahrenheit: {weather?.current.temp_f.toString()}F</li>
-                </ul>
-
-              </div>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
       </Container>
     </div>
   );
