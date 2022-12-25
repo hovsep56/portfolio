@@ -71,6 +71,7 @@ const Components = ({ theme }: { theme: string }) => {
   const [weather, setWeather] = useState<weather>();
   const [count, setcount] = useState<number>(0)
 
+<<<<<<< HEAD
 
   const loadJoke = async () => {
     let response = await fetch("https://icanhazdadjoke.com/", {
@@ -108,6 +109,8 @@ const Components = ({ theme }: { theme: string }) => {
     })();
 
   }, []);
+=======
+>>>>>>> fe82324a276a839cc4a2b85147ea4eca1167d780
   return (
     <div style={{ backgroundColor: theme }}>
       <Container >
@@ -215,6 +218,7 @@ const Components = ({ theme }: { theme: string }) => {
           </Card>
         </Row>
         <h2 style={{ paddingTop: 25, paddingBottom: 25, color: theme === "white" ? "black" : "white" }}>API demonstrations</h2>
+<<<<<<< HEAD
         <Accordion alwaysOpen>
           <Accordion.Item eventKey="0">
             <Accordion.Header >Random Quote</Accordion.Header>
@@ -266,6 +270,8 @@ const Components = ({ theme }: { theme: string }) => {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+=======
+>>>>>>> fe82324a276a839cc4a2b85147ea4eca1167d780
       </Container>
     </div>
   );
