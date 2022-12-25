@@ -31,24 +31,46 @@ interface Joke {
   joke: string,
   status: number
 }
+interface news {
+  source: { id: any, name: string }
+  author: string,
+  title: string,
+  description: string,
+  url: any,
+  urlToImage: any
+}
+interface weather {
+  current: {
+    last_updated: string,
+    temp_c: Number,
+    temp_f: Number
+  }
+}
 
+
+const nightMode = (theme: string) => {
+  return { backgroundColor: theme === "black" ? "black" : "white" }
+}
 
 const Navigation = () => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container style={{ alignContent: 'center' }}>
         <Nav className="me-auto" style={{ alignContent: 'center' }}>
-          <NavLink to="/" style={{ textDecoration: 'none', color: 'grey', paddingRight: 30 }}>Home</NavLink>
-          <NavLink to="contact" style={{ textDecoration: 'none', color: 'grey' }}>Contact me</NavLink>
+          <NavLink to="/" className={styles.navlink} style={{ paddingRight: 30 }}>Home</NavLink>
+          <NavLink to="contact" className={styles.navlink} style={{ fontWeight: 'bold' }}>Contact me</NavLink>
         </Nav>
       </Container>
     </Navbar>
   )
 }
 
-const Components = () => {
+const Components = ({ theme }: { theme: string }) => {
   const [quote, setQuote] = useState<Quote>();
   const [joke, setJoke] = useState("");
+  const [article, setArticle] = useState<news[]>([]);
+  const [weather, setWeather] = useState<weather>();
+
 
   const loadJoke = async () => {
     let response = await fetch("https://icanhazdadjoke.com/", {
@@ -62,148 +84,189 @@ const Components = () => {
     const fetchFunction = async () => {
       let result = await fetch("https://api.quotable.io/random");
       let json: Quote = await result.json();
-
       setQuote(json);
     }
     fetchFunction();
   }, []);
 
-  /*useEffect(() => {
-    const fetchFunction = async () => {
-      let result = await fetch("https://newsapi.org/v2/everything?q=apple&from=2022-12-14&to=2022-12-14&sortBy=popularity&apiKey=d4ffad5006aa4becb7253765145b053e");
-      //let json: Quote = await result.json();
+  useEffect(() => {
+    (async () => {
+      let response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey=d4ffad5006aa4becb7253765145b053e`);
+      let data = await response.json();
+      setArticle(data.articles)
+    })();
 
-      console.log(result)
-    }
-    fetchFunction();
-  }, []);*/
+  }, []);
 
+  useEffect(() => {
+    (async () => {
+      let response = await fetch(`https://api.weatherapi.com/v1/current.json?key=8d21542a2f2f4c14b14135505221812&q=Belgium`);
+      let data = await response.json();
+      console.log(data)
+      setWeather(data)
+    })();
+
+  }, []);
   return (
-    <Container >
-      <div >
-        <Outlet />
-      </div>
-      <h1 style={{ textAlign: 'center', paddingBottom: 50 }}>My Portfolio</h1>
-      <h2 style={{ textAlign: 'center' }}>About Me</h2>
-      <div style={{ textAlign: 'center', paddingBottom: 80, fontWeight: 'bold', fontSize: 20 }}>
-        Greetings, my name is Hovsep Smbatian and welcome to my portfolio!!
-        i'm a second year student for graduate programming from a school called "AP",
-        My portfolio is here to show the different components i have created during my lessons in webframeworks if you wish to interact with any of em feel free to do so by clicking the button on each box.
-         I have also prepared some API demonstrations at the bottom of the page to show off my skills using API's</div>
-      <h2 style={{ textAlign: 'center', paddingBottom: 50 }}>My components</h2>
-      <Row className='justify-content-center'>
+    <div style={{ backgroundColor: theme }}>
+      <Container >
+        <div >
+          <Outlet />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ paddingBottom: 50, color: theme === "white" ? "black" : "white" }} >My Portfolio</h1>
 
-        <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/ColorSelect.jpg')} />
-          <Card.Body>
-            <Card.Title>Color Select</Card.Title>
-            <Card.Text>
-              A colorselect that shows the color based on which one you selected, it can also show multiple colors when selecting multiple.
-            </Card.Text>
-            <NavLink to={"page1"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
+          <h2 style={{ color: theme === "white" ? "black" : "white" }}>About Me</h2>
+          <div className={styles.abouttext} style={{ color: theme === "white" ? "black" : "white" }}>
+            Greetings, my name is Hovsep Smbatian and welcome to my portfolio!!
+            i'm a second year student for graduate programming from a school called "AP",
+            My portfolio is here to show the different components i have created during my lessons in webframeworks if you wish to interact with any of em feel free to do so by clicking the button on each box.
+            I have also prepared some API demonstrations at the bottom of the page to show off my skills using API's</div>
+          <h2 style={{ paddingBottom: 50, color: theme === "white" ? "black" : "white" }}>My components</h2>
+        </div>
+        <Row className='justify-content-center'>
 
-        <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/filter.jpg')} />
-          <Card.Body>
-            <Card.Title>Filter</Card.Title>
-            <Card.Text>
-              A list of objects that can be filtered by name and sorted based on name, age and year
-            </Card.Text>
-            <Link to={"page2"}>Show me!</Link>
-          </Card.Body>
-        </Card>
+          <Card style={{ width: '18rem', marginRight: 20, marginBottom: 20 }}>
+            <Card.Img variant="top" src={require('./images/ColorSelect.jpg')} />
+            <Card.Body>
+              <Card.Title>Color Select</Card.Title>
+              <Card.Text>
+                A colorselect that shows the color based on which one you selected, it can also show multiple colors when selecting multiple.
+              </Card.Text>
+              <NavLink to={"page1"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
 
-        <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/Shoppinglist.jpg')} />
-          <Card.Body>
-            <Card.Title>Shopping list</Card.Title>
-            <Card.Text>
-              A list where you can add and remove items.
-            </Card.Text>
-            <NavLink to={"page3"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
+          <Card style={{ width: '18rem', marginRight: 20, marginBottom: 20 }}>
+            <Card.Img variant="top" src={require('./images/filter.jpg')} />
+            <Card.Body>
+              <Card.Title>Filter</Card.Title>
+              <Card.Text>
+                A list of objects that can be filtered by name and sorted based on name, age and year
+              </Card.Text>
+              <Link to={"page2"}>Show me! (no dark mode)</Link>
+            </Card.Body>
+          </Card>
 
-        <Card style={{ width: '18rem', marginRight: 20,marginBottom:20 }}>
-          <Card.Img variant="top" src={require('./images/interval.jpg')} />
-          <Card.Body>
-            <Card.Title>Intervals</Card.Title>
-            <Card.Text>
-              A component that creates random values at specific intervals.
-            </Card.Text>
-            <NavLink to={"page4"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
+          <Card style={{ width: '18rem', marginRight: 20, marginBottom: 20 }}>
+            <Card.Img variant="top" src={require('./images/Shoppinglist.jpg')} />
+            <Card.Body>
+              <Card.Title>Shopping list</Card.Title>
+              <Card.Text>
+                A list where you can add and remove items.
+              </Card.Text>
+              <NavLink to={"page3"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
 
-        <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img variant="top" src={require('./images/LocalStorage.jpg')} />
-          <Card.Body>
-            <Card.Title>LocalStorage</Card.Title>
-            <Card.Text>
-              A component that locally save data so it stays the same when used again.
-            </Card.Text>
-            <NavLink to={"page5"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
+          <Card style={{ width: '18rem', marginRight: 20, marginBottom: 20 }}>
+            <Card.Img variant="top" src={require('./images/interval.jpg')} />
+            <Card.Body>
+              <Card.Title>Intervals</Card.Title>
+              <Card.Text>
+                A component that creates random values at specific intervals.
+              </Card.Text>
+              <NavLink to={"page4"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
 
-        <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img style={{maxHeight:200,maxWidth:200}} variant="top" src={require('./images/Pokemon.jpg')} />
-          <Card.Body>
-            <Card.Title>Pokemon</Card.Title>
-            <Card.Text>
-              A list that calls from a API where you can search pokemon by name or set the limit on how big the list can be
-            </Card.Text>
-            <NavLink to={"page6"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
+          <Card style={{ width: '18rem', marginRight: 20 }}>
+            <Card.Img variant="top" src={require('./images/LocalStorage.jpg')} />
+            <Card.Body>
+              <Card.Title>LocalStorage</Card.Title>
+              <Card.Text>
+                A component that locally save data so it stays the same when used again.
+              </Card.Text>
+              <NavLink to={"page5"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
 
-        <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img variant="top" src={require('./images/ToDo.jpg')} />
-          <Card.Body>
-            <Card.Title>ToDo</Card.Title>
-            <Card.Text>
-              A simple ToDo list
-            </Card.Text>
-            <NavLink to={"page7"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '18rem', marginRight: 20 }}>
-          <Card.Img style={{maxHeight:200,maxWidth:200}} variant="top" src={require('./images/TicTacToe.jpg')} />
-          <Card.Body>
-            <Card.Title>TicTacToe</Card.Title>
-            <Card.Text>
-              A component where you can play a game of TicTacToe
-            </Card.Text>
-            <NavLink to={"page8"}>Show me!</NavLink>
-          </Card.Body>
-        </Card>
-      </Row>
-      <h2 style={{paddingTop:25,paddingBottom:25}}>API demonstrations</h2>
-      <Accordion alwaysOpen>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header >Random Quote</Accordion.Header>
-          <Accordion.Body>
-            {quote && (
-              <ul>
-                <li>Author: {quote.author}</li>
-                <li>Quote: {quote.content}</li>
-              </ul>
-            )}
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header >Jokes</Accordion.Header>
-          <Accordion.Body>
-            <div>
-            <div>{joke}</div>
-            <button onClick={loadJoke}>New joke</button>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    </Container>
+          <Card style={{ width: '18rem', marginRight: 20 }}>
+            <Card.Img style={{ maxHeight: 200, maxWidth: 200 }} variant="top" src={require('./images/Pokemon.jpg')} />
+            <Card.Body>
+              <Card.Title>Pokemon</Card.Title>
+              <Card.Text>
+                A list that calls from a API where you can search pokemon by name or set the limit on how big the list can be
+              </Card.Text>
+              <NavLink to={"page6"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
+
+          <Card style={{ width: '18rem', marginRight: 20 }}>
+            <Card.Img variant="top" src={require('./images/ToDo.jpg')} />
+            <Card.Body>
+              <Card.Title>ToDo</Card.Title>
+              <Card.Text>
+                A simple ToDo list
+              </Card.Text>
+              <NavLink to={"page7"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
+          <Card style={{ width: '18rem', marginRight: 20 }}>
+            <Card.Img style={{ maxHeight: 200, maxWidth: 200 }} variant="top" src={require('./images/TicTacToe.jpg')} />
+            <Card.Body>
+              <Card.Title>TicTacToe</Card.Title>
+              <Card.Text>
+                A component where you can play a game of TicTacToe
+              </Card.Text>
+              <NavLink to={"page8"}>Show me! (no dark mode)</NavLink>
+            </Card.Body>
+          </Card>
+        </Row>
+        <h2 style={{ paddingTop: 25, paddingBottom: 25, color: theme === "white" ? "black" : "white" }}>API demonstrations</h2>
+        <Accordion alwaysOpen>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header >Random Quote</Accordion.Header>
+            <Accordion.Body>
+              {quote && (
+                <ul>
+                  <li>Author: {quote.author}</li>
+                  <li>Quote: {quote.content}</li>
+                </ul>
+              )}
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="1">
+            <Accordion.Header >Jokes</Accordion.Header>
+            <Accordion.Body>
+              <div>
+                <div>{joke}</div>
+                <button onClick={loadJoke}>New joke</button>
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="2">
+            <Accordion.Header >Current news</Accordion.Header>
+            <Accordion.Body>
+              <div>
+                <ul style={{ listStyleType: 'decimal' }}>
+                  <div>{article.map(art => {
+                    return (
+                      <li>
+                        <div> {art.title}</div>
+                      </li>
+                    )
+                  })}</div>
+                </ul>
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="3">
+            <Accordion.Header >Current weather in Belgium</Accordion.Header>
+            <Accordion.Body>
+              <div>
+                <ul>
+                  <li>Last updated: {weather?.current.last_updated}</li>
+                  <li>Celcius: {weather?.current.temp_c.toString()}C</li>
+                  <li>Fahrenheit: {weather?.current.temp_f.toString()}F</li>
+                </ul>
+
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      </Container>
+    </div>
   );
 }
 
@@ -217,24 +280,13 @@ const Root = () => {
   );
 }
 
-//home
-const Home = () => {
-  return (
-    <div>
-      <Navigation />
-      <Components />
-    </div>
-
-  )
-}
-
 //contact me page
-const Contact = () => {
+const Contact = ({ theme }: { theme: string }) => {
   const [to_name, setTo_name] = useState("");
   const [from_name, setFrom_name] = useState("");
   const [message, setMessage] = useState("");
 
-  const sendEmail:React.FormEventHandler<HTMLFormElement> = (e) => {
+  const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const emailcontent = {
       to_name: to_name,
@@ -252,42 +304,55 @@ const Contact = () => {
   };
   return (
     <div>
-      <Navigation />
-      <Container >
-        <form onSubmit={sendEmail}>
-          <label>Name</label>
-          <input type="text" name="to_name" onChange={(e) => setTo_name(e.target.value)} />
-          <label>Email</label>
-          <input type="email" name="from_name" onChange={(e) => setFrom_name(e.target.value)} />
-          <label>Message</label>
-          <textarea name="message" onChange={(e) => setMessage(e.target.value)} />
-          <input type="submit" value="Send" />
-        </form>
-      </Container>
+      <div style={{ paddingTop: 20, backgroundColor: theme, height: '100vh' }}>
+        <Container >
+          <div style={{ textAlign: 'center' }}>
+          </div>
+          <h2 style={{ textAlign: 'center', color: theme === "white" ? "black" : "white" }}>Feel free to contact me here</h2>
+          <Form onSubmit={sendEmail}>
+            <Form.Group className="mb-3">
+              <Form.Label style={{ color: theme === "white" ? "black" : "white" }}>Title</Form.Label>
+              <Form.Control name='to_name' type="text" placeholder="Enter title" onChange={(e) => setTo_name(e.target.value)} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label style={{ color: theme === "white" ? "black" : "white" }}>Email</Form.Label>
+              <Form.Control name='from_name' type="email" placeholder="Enter email" onChange={(e) => setFrom_name(e.target.value)} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label style={{ color: theme === "white" ? "black" : "white" }}>Message</Form.Label>
+              <Form.Control name='message' type="text" placeholder="Enter message" onChange={(e) => setMessage(e.target.value)} />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </Container>
+      </div>
     </div>
   )
-
 }
+
+
 
 //page 1
 const Page1 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <ColorSelect/>
+      <Navigation />
+      <ColorSelect />
     </>
   )
-  
+
 }
 
 //page 2
 
 
 const Page2 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <Filter/>
+      <Navigation />
+      <Filter />
     </>
   )
 }
@@ -295,20 +360,20 @@ const Page2 = () => {
 //page 3
 
 const Page3 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <ShoppingList/>
+      <Navigation />
+      <ShoppingList />
     </>
   )
 }
 
 //page4
 const Page4 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <Intervals/>
+      <Navigation />
+      <Intervals />
     </>
   )
 
@@ -316,45 +381,46 @@ const Page4 = () => {
 
 //page5
 const Page5 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <LocalStorage/>
+      <Navigation />
+      <LocalStorage />
     </>
   )
 }
 
 //page6
 const Page6 = () => {
-return(
-  <>
-  <Navigation />
-  <Pokemon/>
-  </>
-)
+  return (
+    <>
+      <Navigation />
+      <Pokemon />
+    </>
+  )
 }
 
 //page7
 const Page7 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <ToDo/>
+      <Navigation />
+      <ToDo />
     </>
   )
 }
 
 //page8
 const Page8 = () => {
-  return(
+  return (
     <>
-    <Navigation />
-    <TicTacToe/>
+      <Navigation />
+      <TicTacToe />
     </>
   )
 }
 
 const App = () => {
+  const [theme, setTheme] = useState("white");
   const router = createBrowserRouter([
     {
       path: "/",
@@ -362,7 +428,13 @@ const App = () => {
       children: [
         {
           path: "",
-          element: <Home />
+          element: <div>
+            <Navigation />
+            <div style={{ backgroundColor: theme, textAlign: 'center', paddingTop: 20 }}>
+              <Button variant="dark" onClick={() => { setTheme(theme => theme === "white" ? "black" : "white") }}> Night mode</Button>
+            </div>
+            <Components theme={theme} />
+          </div>
         },
         {
           path: "page1",
@@ -398,7 +470,14 @@ const App = () => {
         },
         {
           path: "contact",
-          element: <Contact />
+          element: <div>
+            <Navigation />
+            <div style={{ backgroundColor: theme, textAlign: 'center', paddingTop: 20 }}>
+              <Button variant="dark" onClick={() => { setTheme(theme => theme === "white" ? "black" : "white") }}> Night mode</Button>
+            </div>
+            <Contact theme={theme} />
+
+          </div>
         }
       ]
     }
