@@ -5,7 +5,6 @@ import styles from './App.module.css';
 import { Row, Accordion, Card, Navbar, Nav, Container, Form, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import emailjs from '@emailjs/browser';
-import { ColorRing } from 'react-loader-spinner'
 import ColorSelect from './Components/ColorSelect'
 import Intervals from './Components/Intervals'
 import LocalStorage from './Components/LocalStorage'
